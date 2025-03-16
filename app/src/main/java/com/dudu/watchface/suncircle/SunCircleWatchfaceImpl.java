@@ -31,7 +31,6 @@ public class SunCircleWatchfaceImpl extends WatchFace {
     public SunCircleWatchfaceImpl(Context context) {
         super(context);
         setLayerType(View.LAYER_TYPE_SOFTWARE,render.blurPaint);
-        
     }
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {

@@ -42,6 +42,7 @@ public abstract class SunCircleRender {
                 }
             };*/
     private float circleY; // 圆的位置
+    private float circleEndY; //圆最终位置
     private float screenHeight; // 屏幕高度
     private float screenWidth; // 屏幕宽度
 
@@ -54,10 +55,10 @@ public abstract class SunCircleRender {
         screenWidth = width;
         screenHeight = height;
         circleY = screenHeight;
-
+        updateCircleY();
         blurPaint.setMaskFilter(new BlurMaskFilter(screenWidth*5/90f, BlurMaskFilter.Blur.NORMAL));
         // handler.postDelayed(this::startAnimation,1000);
-        Typeface timeFont = context.getResources().getFont(R.font.ndot57);
+        Typeface timeFont = context.getResources().getFont(R.font.cmf_by_nothing_time_font_watch);
         timePaint.setTypeface(timeFont);
         timePaint.setColor(Color.WHITE);
         timePaint.setTextSize(screenWidth*0.2f);
@@ -96,8 +97,8 @@ public abstract class SunCircleRender {
 
         canvas.drawText(String.valueOf(formatTime(date.getHours()).charAt(0)),timeX+(fontMaxWidth-timePaint.measureText(String.valueOf(formatTime(date.getHours()).charAt(0))))/2,timeY,timePaint);
         canvas.drawText(String.valueOf(formatTime(date.getHours()).charAt(1)),timeX+fontMaxWidth+(fontMaxWidth-timePaint.measureText(String.valueOf(formatTime(date.getHours()).charAt(1))))/2,timeY,timePaint);
-        canvas.drawText(String.valueOf(formatTime(date.getMinutes()).charAt(0)),timeX+(fontMaxWidth-timePaint.measureText(String.valueOf(formatTime(date.getMinutes()).charAt(0))))/2,timeY+textHeight*0.85f,timePaint);
-        canvas.drawText(String.valueOf(formatTime(date.getMinutes()).charAt(1)),timeX+fontMaxWidth+(fontMaxWidth-timePaint.measureText(String.valueOf(formatTime(date.getMinutes()).charAt(1))))/2,timeY+textHeight*0.85f,timePaint);
+        canvas.drawText(String.valueOf(formatTime(date.getMinutes()).charAt(0)),timeX+(fontMaxWidth-timePaint.measureText(String.valueOf(formatTime(date.getMinutes()).charAt(0))))/2,timeY+textHeight*1.15f,timePaint);
+        canvas.drawText(String.valueOf(formatTime(date.getMinutes()).charAt(1)),timeX+fontMaxWidth+(fontMaxWidth-timePaint.measureText(String.valueOf(formatTime(date.getMinutes()).charAt(1))))/2,timeY+textHeight*1.15f,timePaint);
 
         fontMetrics = datePaint.getFontMetrics();
         textHeight = fontMetrics.bottom - fontMetrics.top;
@@ -142,20 +143,27 @@ public abstract class SunCircleRender {
     }
 
     private void updateAnimation() {
-        if (circleY > screenWidth*2/45f) {
-            circleY -= screenWidth/30; // 每次上移 5 像素
+        if (!isBetween(circleY,circleEndY-30,circleEndY+30)) {
+            circleY += screenWidth/(circleY>circleEndY?-30:30); // 每次上移 5 像素
             redraw(); // 触发重绘
-            handler.postDelayed(this::updateAnimation, (long)(screenHeight/50)); // 控制帧率
-        } else {
-            isAnimating = false; // 动画结束
+            //handler.postDelayed(this::updateAnimation, (long)(screenHeight/50)); // 控制帧率
         }
+        handler.postDelayed(this::updateAnimation, (long)(screenHeight/50)); // 控制帧率
     }
-
+    public boolean isBetween(float num, float min, float max) {
+        return num >= min && num <= max;
+    }
     
     public void onTimeTick() {
+        updateCircleY();
         redraw();
     }
-
+    private void updateCircleY() {
+    	Date date = new Date();
+        float hour = date.getHours()+date.getMinutes()/60f;
+        float hour12 = hour>12?24-hour:hour;
+        circleEndY = screenHeight - screenHeight*hour12/12f;
+    }
     public void onAmbientModeChanged(boolean enabled) {
         if (enabled) {/*
             timeRefreshCycle = 60000;
@@ -172,5 +180,8 @@ public abstract class SunCircleRender {
     public void onDestroy() {
         //handler.removeCallbacksAndMessages(null); // 停止所有动画
         //timeHandler.removeCallbacksAndMessages(null);
+    }
+    public void onVisibilityChanged() {
+    	redraw();
     }
 }
