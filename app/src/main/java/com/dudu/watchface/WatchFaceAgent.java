@@ -4,6 +4,7 @@ import android.content.Context;
 import com.dudu.watchface.suncircle.SunCircleRender;
 import com.dudu.watchface.lunacircle.LunaCircleRender;
 import java.util.Calendar;
+import com.dudu.watchface.suncircle.R;
 
 public class WatchFaceAgent {
     public static Object getCurrentRender(Context context) {

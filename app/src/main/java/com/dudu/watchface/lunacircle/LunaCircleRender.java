@@ -15,6 +15,7 @@ import android.os.Message;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.view.SurfaceHolder;
 import java.util.Date;
+import com.dudu.watchface.suncircle.R;
 
 public abstract class LunaCircleRender {
     private Context context;
