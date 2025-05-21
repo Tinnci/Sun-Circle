@@ -40,6 +40,7 @@ public class SunCircleWatchFaceService extends CanvasWatchFaceService {
         }
         @Override
         public void onVisibilityChanged(boolean visible) {
+            render.onVisibilityChanged();
             /*if (visible) {
                 circleY = screenHeight;
                 invalidate();
