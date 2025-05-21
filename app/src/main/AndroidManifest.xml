@@ -11,10 +11,10 @@
         android:theme="@style/AppTheme">
 
         <service
-            android:name=".SunCircleWatchFaceService"
+            android:name=".AutoSwitchWatchFaceService"
             android:directBootAware="true"
             android:exported="true"
-            android:label="Sun Circle"
+            android:label="Auto Switch WatchFace"
             android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />

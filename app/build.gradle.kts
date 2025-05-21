@@ -1,4 +1,3 @@
-
 plugins {
     id("com.android.application")
     
@@ -66,3 +65,5 @@ dependencies {
     implementation(files("./libs/watchface-dev-utils.aar"))
     implementation("com.blankj:utilcodex:1.31.1")
 }
+
+// 已集成 AutoSwitchWatchFaceService 用于日夜自动切换表盘
